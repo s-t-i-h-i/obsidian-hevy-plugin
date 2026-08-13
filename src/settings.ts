@@ -1,18 +1,20 @@
 import { App, PluginSettingTab, Setting } from 'obsidian';
-import MyPlugin from './main';
+import HevySync from './main';
 
-export interface MyPluginSettings {
-	mySetting: string;
+export interface HevySyncSettings {
+	secretKey: string;
+	workoutsFolder: string;
 }
 
-export const DEFAULT_SETTINGS: MyPluginSettings = {
-	mySetting: 'default',
+export const DEFAULT_SETTINGS: HevySyncSettings = {
+	secretKey: '',
+	workoutsFolder: 'Hevy',
 };
 
 export class SampleSettingTab extends PluginSettingTab {
-	plugin: MyPlugin;
+	plugin: HevySync;
 
-	constructor(app: App, plugin: MyPlugin) {
+	constructor(app: App, plugin: HevySync) {
 		super(app, plugin);
 		this.plugin = plugin;
 	}
@@ -22,17 +24,33 @@ export class SampleSettingTab extends PluginSettingTab {
 
 		containerEl.empty();
 
+		// API key from hevy
 		new Setting(containerEl)
-			.setName('Settings #1')
-			.setDesc("It's a secret")
-			.addText((text) =>
+			.setName('Secret key')
+			.setDesc('Your API secret key')
+			.addText((text) => {
+				text.inputEl.type = 'password';
 				text
-					.setPlaceholder('Enter your secret')
-					.setValue(this.plugin.settings.mySetting)
+					.setPlaceholder('Enter secret key')
+					.setValue(this.plugin.settings.secretKey)
 					.onChange(async (value) => {
-						this.plugin.settings.mySetting = value;
+						this.plugin.settings.secretKey = value;
 						await this.plugin.saveSettings();
-					}),
-			);
+					});
+			});
+		
+		// Folder for storing workouts
+		new Setting(containerEl)
+			.setName('Workouts folder')
+			.setDesc('Folder for storing workouts')
+			.addText((text) => {
+				text
+					.setPlaceholder('Enter folder name')
+					.setValue(this.plugin.settings.workoutsFolder)
+					.onChange(async (value) => {
+						this.plugin.settings.workoutsFolder = value;
+						await this.plugin.saveSettings();
+					});
+			});
 	}
 }
