@@ -2,6 +2,8 @@ import { HevyWorkout } from './types';
 
 export function formatWorkout(workout: HevyWorkout): string {
     
+    const frontmatter = formatFrontmatter(workout);
+
     const title = `# ${workout.title}\n\n${workout.description}\n\n${workout.start_time}`;
     
     // iteracja przez cwiczenia w treningu i tworzenie markdown dla kazdego cwiczenia
@@ -20,6 +22,14 @@ export function formatWorkout(workout: HevyWorkout): string {
 });
 
     // zwraca string z markdown
-    return `${title}\n\n${exercises.join('\n\n')}`;
+    return `${frontmatter}${title}\n\n${exercises.join('\n\n')}`;
 
+}
+
+export function formatFrontmatter(workout: HevyWorkout): string {
+    const frontmatter = {
+        date: workout.start_time.split('T')[0],
+        title: workout.title,
+    }
+    return `---\n${Object.entries(frontmatter).map(([key, value]) => `${key}: ${value}`).join('\n')}\n---\n\n`;
 }

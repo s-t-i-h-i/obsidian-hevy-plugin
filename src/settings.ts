@@ -52,5 +52,16 @@ export class SampleSettingTab extends PluginSettingTab {
 						await this.plugin.saveSettings();
 					});
 			});
+		
+		new Setting(containerEl)
+			.setName('Full sync')
+			.setDesc('Sync all workouts')
+			.addButton((button) => {
+				button
+            .setButtonText('Sync now')
+            .onClick(async () => {
+                await this.plugin.syncWorkouts();
+            });
+    	});
 	}
 }

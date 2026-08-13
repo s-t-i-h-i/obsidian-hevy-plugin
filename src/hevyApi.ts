@@ -1,9 +1,9 @@
 import { requestUrl } from 'obsidian';
 import { HevyWorkoutsResponse } from './types';
 
-export async function fetchHevyWorkouts(secretKey: string): Promise<HevyWorkoutsResponse> {
+export async function fetchHevyWorkouts(secretKey: string, page: number): Promise<HevyWorkoutsResponse> {
     const response = await requestUrl({
-        url: 'https://api.hevyapp.com/v1/workouts',
+        url: `https://api.hevyapp.com/v1/workouts?page=${page}`,
         method: 'GET',
         headers: {'api-key': secretKey,}
      })
