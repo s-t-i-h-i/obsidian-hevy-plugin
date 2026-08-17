@@ -63,7 +63,7 @@ export default class HevySync extends Plugin {
 
 			//creating notes for each workout
 			for (const workout of allWorkouts) {
-				const markdown = formatWorkout(workout);
+				const markdown = formatWorkout(workout, this.settings.defaultBodyweight);
 				
 				// czy sciezka do pliku istnieje
 				const path = `${folderPath}/${workout.id}.md`;

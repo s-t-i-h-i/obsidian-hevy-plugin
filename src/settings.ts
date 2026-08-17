@@ -4,11 +4,13 @@ import HevySync from './main';
 export interface HevySyncSettings {
 	secretKey: string;
 	workoutsFolder: string;
+	defaultBodyweight: number;
 }
 
 export const DEFAULT_SETTINGS: HevySyncSettings = {
 	secretKey: '',
 	workoutsFolder: 'Hevy',
+	defaultBodyweight: 81,
 };
 
 export class SampleSettingTab extends PluginSettingTab {
@@ -53,6 +55,20 @@ export class SampleSettingTab extends PluginSettingTab {
 					});
 			});
 		
+		new Setting(containerEl)
+			.setName('Default bodyweight (kg)')
+			.setDesc('Used for bodyweight exercises when calculating total volume')
+			.addText((text) => {
+				text
+					.setPlaceholder('e.g. 81')
+					.setValue(this.plugin.settings.defaultBodyweight.toString())
+					.onChange(async (value) => {
+						const num = Number(value);
+						this.plugin.settings.defaultBodyweight = isNaN(num) ? 81 : num;
+						await this.plugin.saveSettings();
+					});
+			});
+
 		new Setting(containerEl)
 			.setName('Full sync')
 			.setDesc('Sync all workouts')
